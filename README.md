@@ -11,8 +11,6 @@
 
 An R script for converting raw Multiplexed Assay of Variant Effect (MAVE) scores into log likelihood ratios of pathogenicity (LLRp) and mapping them to ACMG/AMP evidence categories using the [jweile/maveLLR](https://github.com/jweile/maveLLR) framework, based on fixed thresholds found in [van Loggerenberg et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC9934555/#S14).
 
-To run mave_reclassification.R:
-
 ---
 
 ## Overview
@@ -81,9 +79,8 @@ The input must be a **tab-delimited (TSV)** file with a header row. The followin
 
 | Column | Description |
 |--------|-------------|
-| `Category` | Variant class label: `1` = pathogenic reference, `-1` = benign reference, `0` = library variant |
 | `<scoreLabel>` | The MAVE functional score column specified via `--scoreLabel` (e.g., `meanAcrossReps`) |
-| `<refLabel>` | The reference set category column specified via `--refLabel` (e.g., `Category`). Used to separate variants into reference sets for KDE fitting and the library set for LLRp transformation. Ensure all three category values (1, -1, 0) are present in the input. |
+| `<refLabel>` | The vVariant class label specified via `--refLabel` (e.g., `Category`). Used to separate variants into reference sets for KDE fitting and the library set for LLRp transformation. Ensure all three category values are present in the input: `1` = pathogenic reference, `-1` = benign reference, `0` = library variant. |
 
 ---
 
@@ -104,9 +101,9 @@ The output is the input TSV with two additional columns appended:
 | 1.27 – 2.54 | `PSt` | Strong pathogenic |
 | 0.63 – 1.27 | `PM` | Moderate pathogenic |
 | 0.31 – 0.63 | `PSu` | Supporting pathogenic |
-| −0.31 – 0.31 | `I` | Indeterminate |
-| −1.27 – −0.31 | `LNorm` | Supporting benign |
-| < −1.27 | `Norm` | Strong benign |
+| -0.31 – 0.31 | `I` | Indeterminate |
+| -1.27 – -0.31 | `LNorm` | Supporting benign |
+| < -1.27 | `Norm` | Strong benign |
 
 A summary density/LLR plot is also generated to the active R graphics device during execution.
 
@@ -120,4 +117,4 @@ If you use this script, please cite the associated publication:
 
 And the underlying `maveLLR` method:
 
-> Weile J et al. maveLLR: converting MAVE scores to log likelihood ratios of pathogenicity.
+> [jweile/maveLLR](https://github.com/jweile/maveLLR) maveLLR: Calculate pathogenicity log likelihood ratios (LLRs) for MAVE datasets.
