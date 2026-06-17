@@ -9,7 +9,7 @@
 
 # mave_reclassification.R
 
-An R script for converting raw Multiplexed Assay of Variant Effect (MAVE) scores into log likelihood ratios of pathogenicity (LLRp) and mapping them to ACMG/AMP evidence categories using the [jweile/maveLLR](https://github.com/jweile/maveLLR) framework, based on fixed thresholds found in [van Loggerenberg et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC9934555/#S14).
+An R script for converting raw Multiplexed Assay of Variant Effect (MAVE) scores into log likelihood ratios of pathogenicity (LLRp) and mapping them to ACMG/AMP evidence categories using the [jweile/maveLLR](https://github.com/jweile/maveLLR) framework, based on fixed thresholds found in [van Loggerenberg et al., 2023](https://pubmed.ncbi.nlm.nih.gov/37729906/).
 
 ---
 
@@ -80,7 +80,23 @@ The input must be a **tab-delimited (TSV)** file with a header row. The followin
 | Column | Description |
 |--------|-------------|
 | `<scoreLabel>` | The MAVE functional score column specified via `--scoreLabel` (e.g., `meanAcrossReps`) |
-| `<refLabel>` | The vVariant class label specified via `--refLabel` (e.g., `Category`). Used to separate variants into reference sets for KDE fitting and the library set for LLRp transformation. Ensure all three category values are present in the input: `1` = pathogenic reference, `-1` = benign reference, `0` = library variant. |
+| `<refLabel>` | The Variant class label specified via `--refLabel` (e.g., `Category`). Used to separate variants into reference sets for KDE fitting and the library set for LLRp transformation. Ensure all three category values are present in the input: `1` = pathogenic reference, `-1` = benign reference, `0` = library variant. |
+
+All other columns are preserved as-is in the output.
+
+> The `Category` column is used to separate variants into reference sets for KDE fitting and the library set for LLRp transformation. Ensure all three category values (`1`, `-1`, `0`) are present in the input.
+
+### Example Input
+
+| variant | meanAcrossReps | Category |
+|---|---|---|
+| var_id_1 | 0.752667413 | 0 |
+| var_id_39 | 0.753941193 | -1 |
+| var_id_2 | 0.656628397 | 0 |
+| var_id_41 | 0.746960144 | -1 |
+| var_id_3 | 0.448961487 | 0 |
+
+*(`0` = library variant to be classified, `-1` = benign reference, `1` = pathogenic reference — not shown above, but required somewhere in the file)*
 
 ---
 
@@ -107,6 +123,18 @@ The output is the input TSV with two additional columns appended:
 
 A summary density/LLR plot is also generated to the active R graphics device during execution.
 
+### Example Output
+
+| variant | meanAcrossReps | Category | llrp_score | llrp_functional_consequence |
+|---|---|---|---|---|
+| var_id_1 | 0.752667413 | 0 | -0.879932254 | LNorm |
+| var_id_2 | 0.656628397 | 0 | -0.658756275 | LNorm |
+| var_id_3 | 0.448961487 | 0 | -0.018621713 | I |
+| var_id_4 | 0.871723154 | 0 | -1.276291047 | Norm |
+| var_id_5 | 0.525012535 | 0 | -0.293072139 | I |
+
+A summary density/LLR plot is also generated to the active R graphics device during execution.
+
 ---
 
 ## Citation
@@ -117,4 +145,4 @@ If you use this script, please cite the associated publication:
 
 And the underlying `maveLLR` method:
 
-> [jweile/maveLLR](https://github.com/jweile/maveLLR) maveLLR: Calculate pathogenicity log likelihood ratios (LLRs) for MAVE datasets.
+> [van Loggerenberg, et al. 2023](https://pubmed.ncbi.nlm.nih.gov/37729906/): Systematically testing human HMBS missense variants to reveal mechanism and pathogenic variation and [jweile/maveLLR](https://github.com/jweile/maveLLR): Calculate pathogenicity log likelihood ratios (LLRs) for MAVE datasets.
